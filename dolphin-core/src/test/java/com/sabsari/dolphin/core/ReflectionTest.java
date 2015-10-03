@@ -12,19 +12,21 @@ import org.junit.Test;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ReflectionTest {
 
     @Test
     public void _test() {
         TestData data = new TestData();
         
-        testFunc(data);
+        trimData(data);
         
         System.out.println(data);
     }
     
-    public static void testFunc(Object o) {
+    public static void trimData(Object o) {
         Class<?> c = o.getClass();
         
         Field[] fields = c.getDeclaredFields();
@@ -39,22 +41,22 @@ public class ReflectionTest {
                     setter.invoke(o, trim(value));
                 }
                 catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                    log.debug(e.getMessage());
                 }
                 catch (InvocationTargetException e) {
-                    e.printStackTrace();
+                    log.debug(e.getMessage());
                 }
                 catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    log.debug(e.getMessage());
                 }
                 catch (IllegalArgumentException e) {
-                    e.printStackTrace();
+                    log.debug(e.getMessage());
                 }
             }
         }
     }
     
-    public static String trim(String str) {
+    private static String trim(String str) {
         if (str == null)
             return null;
         
@@ -66,11 +68,11 @@ public class ReflectionTest {
             return t;
     }
     
-    public static String getGetter(String name) {
+    private static String getGetter(String name) {
         return "get" + WordUtils.capitalize(name);
     }
     
-    public static String getSetter(String name) {
+    private static String getSetter(String name) {
         return "set" + WordUtils.capitalize(name);
     }
     
