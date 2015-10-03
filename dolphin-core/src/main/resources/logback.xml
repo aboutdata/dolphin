@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<property resource="logback.properties" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+		<encoder>
+			<pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] %logger{40} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>
+			<pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] %logger{40} - %msg%n</pattern>
+		</encoder>
+		
+		<file>${log.file.name}</file>		
+
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>${log.level.file.filter}</level>
+		</filter>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<FileNamePattern>${log.file.backup}</FileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+
+	<!-- TRACE < DEBUG < INFO < WARN < ERROR < OFF -->
+	<!-- 3rdparty Loggers -->
+	<!-- 
+		The loggers java.sql.Statement/PreparedStatement/ResultSet can't be enabled
+		if java.sql.Connection is disabled.
+	 -->
+	<logger name="java.sql" level="${log.level.java.sql.opr}" />
+	<logger name="java.sql.Connection" level="${log.level.java.sql.dev}" />
+	<logger name="java.sql.PreparedStatement" level="${log.level.java.sql.dev}" />
+	<logger name="java.sql.ResultSet" level="${log.level.java.sql.dev}" />
+	
+	<logger name="org.hibernate.type" level="${log.level.java.sql.dev}" />
+	<logger name="org.hibernate" level="${log.level.java.sql.dev}" />
+
+	<logger name="org.springframework" level="${log.level.org.springframework}" />
+	<logger name="org.springframework.web.servlet.support" level="${log.level.org.springframework.web}"/>
+
+	<!-- application Loggers -->
+	<logger name="com.skplanet.imglobal" level="${log.level.com.skplanet}" />
+
+	<root level="${log.level.root}">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>

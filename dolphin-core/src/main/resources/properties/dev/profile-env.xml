@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+	<comment>dev-profile environment</comment>
+		
+	<!-- DB -->
+	<entry key="db.driverClassName">com.mysql.jdbc.Driver</entry>
+	<entry key="db.url">jdbc:mysql://10.202.69.166:3306/globalid_db?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;autoReconnectForPools=true</entry>	
+	<entry key="db.username">ciinfra</entry>
+	<entry key="db.password">!cii.ayvr3#</entry>
+	<entry key="db.initialSize">0</entry>
+	<entry key="db.maxActive">25</entry>
+	<entry key="db.maxIdle">25</entry>
+	<entry key="db.minIdle">0</entry>
+	
+	<!-- jpa, hibernate -->
+	<entry key="jpa.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</entry>
+	<entry key="jpa.hbm2ddl">validate</entry>
+	<!--
+	<entry key="jpa.hbm2ddl">validate</entry>
+	<entry key="jpa.hbm2ddl">update</entry>
+	<entry key="jpa.hbm2ddl">create</entry>	
+	<entry key="jpa.hbm2ddl">create-drop</entry>
+	-->
+	<entry key="jpa.showSql">true</entry>
+	<entry key="jpa.formatSql">true</entry>
+	<entry key="jpa.useSqlComments">true</entry>  
+    
+    <!--mail properties-->    
+    <entry key="mail.emailHost">localhost:8080</entry>
+    <entry key="mail.emailPath">/portal/email/confirm?c=</entry>
+    <entry key="mail.host">smtp.gmail.com</entry>
+    <entry key="mail.port">587</entry>
+    <entry key="mail.username">planetuserinfra@gmail.com</entry>
+    <entry key="mail.password">roqkf2xla</entry>
+    <entry key="mail.domain">noreply@sk.com</entry>
+    <entry key="mail.Subject">Verification Mail</entry> 
+</properties>

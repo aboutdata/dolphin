@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+	<!-- success -->
+	<entry key="S001">OK</entry>
+	
+	<!-- business error : common -->
+	<entry key="F001">The User({0}) is not found.</entry>
+	<entry key="F002">The Group({0}) is not found.</entry>
+	<entry key="F003">The password of the user({0}) is incorrect.</entry>
+	<entry key="F004">No history entries found.</entry>
+	
+	<!-- business error : authentication -->
+	<entry key="F101">The email emailId({0}) already exists.</entry>
+	<entry key="F102">The email auth status of the user({0}) is not normal({1}).</entry>
+	<entry key="F103">The email auth failure count is over({0}).</entry>
+	<entry key="F104">The email verification has failed({0}).</entry>
+	<entry key="F105">The password of the user({0}) is incorrect.</entry>
+	<entry key="F106">New password is same as existing one.</entry>
+	
+	<!-- client side error -->
+	<entry key="C001">The API requested does not exist.</entry>
+	<entry key="C002">Invalid request({0}).</entry>
+	<entry key="C003">The parameter ({0}) is mandatory.</entry>
+	<entry key="C004">The request parameters are invalid({0}).</entry>
+	<entry key="C005">The request parameter is unknown({0}).</entry>
+	<entry key="C006">The email of the user({}) is already verified.</entry>
+	
+	<!-- server side error -->
+	<entry key="E001">An unexpected error has occurred in the internal system.</entry>
+	<entry key="E002">An unexpected error has occurred in the internal system.</entry>
+	<entry key="E003">An unexpected error has occurred in the internal system.</entry>
+</properties>
