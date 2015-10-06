@@ -1,79 +1,85 @@
 package com.sabsari.dolphin.core;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
-import org.apache.commons.lang.WordUtils;
 import org.junit.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class ReflectionTest {
-
-    @Test
-    public void _test() {
-        TestData data = new TestData();
+    
+//    @Test
+    public void _맵조작테스트() {
+        Map<String, String> map = new HashMap<>();
+        map.put("key0", "value0");
+        map.put("key1", "value1");
+        map.put("key2", "value2");
         
-        trimData(data);
+        System.out.println(map);
+        
+        for (Map.Entry<String, String> e : map.entrySet()) {
+            map.put(e.getKey(), e.getValue() + "__");
+        }
+        
+        System.out.println(map);
+    }
+    
+    @Test
+    public void _객체필드변경테스트() {
+        TestData data = new TestData();
+        TrimObject.doProcess(new Object());
         
         System.out.println(data);
-    }
-    
-    public static void trimData(Object o) {
-        Class<?> c = o.getClass();
-        
-        Field[] fields = c.getDeclaredFields();
-        
-        for (Field f : fields) {
-            if (f.getType() == String.class) {
-                try {
-                    Method getter = c.getDeclaredMethod(getGetter(f.getName()));
-                    Method setter = c.getDeclaredMethod(getSetter(f.getName()), String.class);
-                    
-                    String value = (String) getter.invoke(o);
-                    setter.invoke(o, trim(value));
-                }
-                catch (NoSuchMethodException e) {
-                    log.debug(e.getMessage());
-                }
-                catch (InvocationTargetException e) {
-                    log.debug(e.getMessage());
-                }
-                catch (IllegalAccessException e) {
-                    log.debug(e.getMessage());
-                }
-                catch (IllegalArgumentException e) {
-                    log.debug(e.getMessage());
-                }
-            }
+                
+        int counter = 1;
+        long start = System.currentTimeMillis();
+
+        for (int i=0 ; i < counter ; i++) {
+            TrimObject.doProcess(data);
         }
-    }
-    
-    private static String trim(String str) {
-        if (str == null)
-            return null;
         
-        String t = str.trim();
+        long end = System.currentTimeMillis();
+        long elapsed = end - start;
+        System.out.println(counter + " 건 처리 소요시간: " + elapsed + "ms");
+        System.out.println("한 건당 평균 " + elapsed / (long)counter + "ms");
         
-        if (t.length() == 0)
-            return null;
-        else
-            return t;
+        System.out.println(data);
+        
     }
     
-    private static String getGetter(String name) {
-        return "get" + WordUtils.capitalize(name);
-    }
-    
-    private static String getSetter(String name) {
-        return "set" + WordUtils.capitalize(name);
+    public static class TrimObject extends StringFieldsManipulation {
+
+        private static TrimObject instance = new TrimObject();
+        
+        public static void doProcess(Object o) {
+            instance.process(o);
+        }
+        
+        private TrimObject() {}
+        
+        @Override
+        protected String manipulate(String str) {
+            if (str == null)
+                return null;
+            
+            String t = str.trim();
+            
+            if (t.length() == 0)
+                return null;
+            else
+                return t;
+        }
+
+        @Override
+        protected String getBasePackage() {            
+            return "com.sabsari";
+        }        
     }
     
     @Getter
@@ -83,7 +89,9 @@ public class ReflectionTest {
         
         private int a;
         
-        private Map<String, String> map;
+        private Map<String, Object> map;
+        
+        private Random rand;
         
         private String key;
         
@@ -95,14 +103,42 @@ public class ReflectionTest {
         
         private String email;
         
+        private Object nothing;
+        
+        private InnerData inner;
+        
         public TestData() {
             a = 1;
-            map = new HashMap<String, String>();
+            map = new HashMap<String, Object>();
+            map.put("key0", "  value1");
+            map.put("key1", new InnerData());
+            map.put("key2", null);
+            map.put("key2", 1004);
+            rand = new Random();
             key = "key";
             id = null;
             ci = "";
             name = "  ";
             email = " email   ";
+            nothing = null;
+            inner = new InnerData();
+        }
+    }
+    
+    @Getter
+    @Setter
+    @ToString
+    public static class InnerData {
+        private String name;
+        
+        private List<Object> list;
+        
+        public InnerData() {
+            name = " name    ";
+            list = new ArrayList<>();
+            list.add(" item  ");
+            list.add(null);
+            list.add(10);
         }
     }
 }
