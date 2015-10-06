@@ -39,13 +39,18 @@ public abstract class StringFieldsManipulation {
             return;
         
         Class<?> c = o.getClass();
-        if (c == String.class || isPrimitiveType(c)) {
+        if (c == String.class || isPrimitiveType(c) || !isInBasePackage(o)) {
             return;
         }
         
         Field[] fields = c.getDeclaredFields();
         
         for (Field f : fields) {
+//            if (f.getType() == c) {
+//                log.debug("Infinite circle!");
+//                throw new IllegalStateException("an infinite circle was detected.");
+//            }
+            
             try {
                 Method getter = c.getDeclaredMethod(getGetter(f.getName()));
                 
@@ -53,9 +58,6 @@ public abstract class StringFieldsManipulation {
                     Method setter = c.getDeclaredMethod(getSetter(f.getName()), String.class);
                     String value = (String) getter.invoke(o);
                     setter.invoke(o, manipulate(value));
-                }
-                else if (f.getType().isPrimitive()) {
-                    ;
                 }
                 else {
                     Object obj = null;
@@ -98,12 +100,16 @@ public abstract class StringFieldsManipulation {
                             }
                         }
                     }
-                    else if (getBasePackage() == null || obj.getClass().getName().startsWith(getBasePackage())) {                        
+                    else {                        
                         process(obj);
                     }
                 }
             }
+            catch (NoSuchMethodException ex) {
+                log.debug("Not found method: " + ex.getMessage());
+            }
             catch (Exception ex) {
+                ex.printStackTrace();
                 log.debug(ex.getMessage());
             }
         }
@@ -112,6 +118,10 @@ public abstract class StringFieldsManipulation {
     protected abstract String getBasePackage();
     
     protected abstract String manipulate(String str);
+    
+    private boolean isInBasePackage(Object obj) {
+        return getBasePackage() == null || obj.getClass().getName().startsWith(getBasePackage());
+    }
     
     private String getGetter(String name) {
         return "get" + WordUtils.capitalize(name);
