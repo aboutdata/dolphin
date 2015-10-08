@@ -12,7 +12,7 @@ import com.sabsari.dolphin.core.common.util.SortedArrayList;
 
 public class SortedListTest {
 	
-	private static int counter = 10000;
+	private static int counter = 100000;
 	private static String[] ips = new String[counter];
 	private static SortedArrayList<Long> baseList;
 	

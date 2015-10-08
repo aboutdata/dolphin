@@ -14,10 +14,18 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class StringFieldsManipulation {
-        
+    
+    private String basePackage = null;
+    
     private Set<Class<?>> set;
         
     protected StringFieldsManipulation() {
+        basePackage = null;
+        initSet();
+    }
+    
+    protected StringFieldsManipulation(String basePackageToCkeck) {
+        basePackage = basePackageToCkeck;
         initSet();
     }
     
@@ -115,12 +123,14 @@ public abstract class StringFieldsManipulation {
         }
     }
     
-    protected abstract String getBasePackage();
+    protected String getBasePackage() {
+        return basePackage;
+    }
     
     protected abstract String manipulate(String str);
     
     private boolean isInBasePackage(Object obj) {
-        return getBasePackage() == null || obj.getClass().getName().startsWith(getBasePackage());
+        return basePackage == null || obj.getClass().getName().startsWith(basePackage);
     }
     
     private String getGetter(String name) {

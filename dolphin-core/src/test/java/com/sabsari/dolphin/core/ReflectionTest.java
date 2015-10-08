@@ -55,13 +55,15 @@ public class ReflectionTest {
     
     public static class TrimObject extends StringFieldsManipulation {
 
-        private static TrimObject instance = new TrimObject();
+        private static TrimObject instance = new TrimObject("com.sabsari");
         
         public static void doProcess(Object o) {
             instance.process(o);
         }
         
-        private TrimObject() {}
+        private TrimObject(String basePackage) {
+            super(basePackage);
+        }
         
         @Override
         protected String manipulate(String str) {
@@ -74,12 +76,7 @@ public class ReflectionTest {
                 return null;
             else
                 return t;
-        }
-
-        @Override
-        protected String getBasePackage() {            
-            return "com.sabsari";
-        }        
+        }     
     }
     
     @Getter
