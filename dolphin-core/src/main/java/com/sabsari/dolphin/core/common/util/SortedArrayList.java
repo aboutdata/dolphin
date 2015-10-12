@@ -1,17 +1,18 @@
 package com.sabsari.dolphin.core.common.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.RandomAccess;
 
 /**
  * List containing sorted elements.
- * use binary search to access each element(O(logN) time complexity).
- * thread-unsafe.
+ * use binary search to access each element O(logN).
+ * thread-safe.
  * 
  * @author sabsari
  */
-public class SortedArrayList<E extends Comparable<E>> implements Iterable<E>, RandomAccess, Cloneable, java.io.Serializable {
+public class SortedArrayList<E extends Comparable<E>> implements Iterable<E>, RandomAccess, Cloneable, Serializable {
 
 	private static final long serialVersionUID = 3643195437801191322L;
 
@@ -63,25 +64,31 @@ public class SortedArrayList<E extends Comparable<E>> implements Iterable<E>, Ra
 	}
 		
 	public boolean add(E element) {
-		int index = getIndexToInsert(element);
-		if (index < 0) {
-			return false;
-		}
-		else {		
-			elementList.add(index, element);
-			return true;
-		}
+	    synchronized (elementList) {
+	        int index = getIndexToInsert(element);
+	        if (index < 0) {
+	            return false;
+	        }
+	        else {      
+	            elementList.add(index, element);
+	            return true;
+	        }
+        }
 	}
 	
 	public void clear() {
-		elementList.clear();
+	    synchronized (elementList) {
+	        elementList.clear();
+	    }
 	}
 	
 	public void remove(E element) {
-		int index = getIndex(element);
-		if (index >= 0) {
-			elementList.remove(index);
-		}
+	    synchronized (elementList) {
+    		int index = getIndex(element);
+    		if (index >= 0) {
+    			elementList.remove(index);
+    		}
+	    }
 	}
 
 	private int getIndexToInsert(E element) {
