@@ -13,6 +13,10 @@ import org.junit.Test;
 
 public class Server {
     
+    public static boolean isOpen(ServerSocket ss) {
+        return ss.isBound() && !ss.isClosed();
+    }
+    
     @Test
     public void _DaytimeServerThreadPool() {
         int port = 13;
