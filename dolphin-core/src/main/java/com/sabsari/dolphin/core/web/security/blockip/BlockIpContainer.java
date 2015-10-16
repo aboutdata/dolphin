@@ -42,31 +42,27 @@ public class BlockIpContainer {
 		return blockIpList.contains(ipNo);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Async
-	public synchronized void add(List<String> ipList) {
+	public void add(List<String> ipList) {
 		blockIpService.registBlockIp(ipList);
-		
-		SortedArrayList<Long> newList = (SortedArrayList<Long>) blockIpList.clone();		
+						
 		int size = ipList.size();
 		for (int i = 0; i < size; i++) {
-			newList.add(CommonUtils.ipToLong(ipList.get(i)));
+		    blockIpList.add(CommonUtils.ipToLong(ipList.get(i)));
 		}		
-		blockIpList = newList;		// 기존 리스트는 gc
+		
 		logger.debug(size + " block ip added asynchronously.");
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Async
-	public synchronized void remove(List<String> ipList) {
+	public void remove(List<String> ipList) {
 		blockIpService.removeBlockIp(ipList);
-		
-		SortedArrayList<Long> newList = (SortedArrayList<Long>) blockIpList.clone();		
+			
 		int size = ipList.size();
 		for (int i = 0; i < size; i++) {
-			newList.remove(CommonUtils.ipToLong(ipList.get(i)));
-		}		
-		blockIpList = newList;
+		    blockIpList.remove(CommonUtils.ipToLong(ipList.get(i)));
+		}
+		
 		logger.debug(size + " block ip removed asynchronously.");
 	}
 }

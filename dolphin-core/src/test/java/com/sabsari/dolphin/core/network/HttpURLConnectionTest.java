@@ -1,4 +1,4 @@
-package com.sabsari.dolphin.core.test;
+package com.sabsari.dolphin.core.network;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

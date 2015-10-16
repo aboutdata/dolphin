@@ -1,12 +1,11 @@
-package com.sabsari.dolphin.core.test;
+package com.sabsari.dolphin.core.network;
 
 import org.junit.Test;
 
-public class ClientSocketTest {
+public class URLConnectionTest {
 
     @Test
     public void _test() {
         
     }
-    
 }
