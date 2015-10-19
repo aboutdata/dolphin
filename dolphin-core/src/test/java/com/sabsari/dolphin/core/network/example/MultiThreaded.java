@@ -1,4 +1,4 @@
-package com.sabsari.dolphin.core.example;
+package com.sabsari.dolphin.core.network.example;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,8 +11,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MultiThreaded extends Thread {
-
-    public static final String END = "\r\n";
     
     private int port;
     private int sizeOfPool;
@@ -38,6 +36,7 @@ public class MultiThreaded extends Thread {
         
     public void run() {
         try (ServerSocket server = new ServerSocket(port)) {
+            System.out.println("서버생성 port:" + port);
             while (true) {
                 try {
                     Socket clientConn = server.accept();
@@ -70,7 +69,7 @@ public class MultiThreaded extends Thread {
                 String recvMsg = null;
                 while(true) {
                     recvMsg = in.readLine();
-                    out.write(recvMsg + END);
+                    out.write(recvMsg + "\r\n");
                     out.flush();
                 }
             }

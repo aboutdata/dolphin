@@ -1,4 +1,4 @@
-package com.sabsari.dolphin.core.network.nio;
+package com.sabsari.dolphin.core.network.example;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -10,23 +10,33 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.junit.Test;
+public class SingleThreadMultiplexing extends Thread {
 
-public class SingleThread {
-
-    public  static int port = 18;
+    public static final String END = "\r\n";
     
-    @Test
-    public void _nio() {
-        
-        ServerSocketChannel serverChannel;
-        Selector selector;
+    private int port = 18;
+    
+    private ServerSocketChannel serverChannel;
+    private Selector selector;
+    
+    public SingleThreadMultiplexing(int port) {
+        this.port = port;
+    }
+    
+    public int getPort() {
+        return port;
+    }
+    
+    @Override
+    public void run() {
         try {
             serverChannel = ServerSocketChannel.open();
             serverChannel.bind(new InetSocketAddress(port));
             serverChannel.configureBlocking(false);
+            System.out.println("서버생성 port:" + port);
+            
             selector = Selector.open();
-            SelectionKey key = serverChannel.register(selector, SelectionKey.OP_ACCEPT);                        
+            serverChannel.register(selector, SelectionKey.OP_ACCEPT);                        
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -41,7 +51,7 @@ public class SingleThread {
                 ex.printStackTrace();
                 break;
             }
-            
+                   
             Set<SelectionKey> readyKeys = selector.selectedKeys();
             Iterator<SelectionKey> itr = readyKeys.iterator();
             while (itr.hasNext()) {
@@ -53,7 +63,8 @@ public class SingleThread {
                         SocketChannel connSocket = server.accept();
                         connSocket.configureBlocking(false);
                         SelectionKey clientKey = connSocket.register(selector, SelectionKey.OP_WRITE | SelectionKey.OP_READ);
-                        ByteBuffer buffer = ByteBuffer.allocate(100);
+                        ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+//                        ByteBuffer buffer = ByteBuffer.allocate(1024); 
                         clientKey.attach(buffer);
                     }
                     

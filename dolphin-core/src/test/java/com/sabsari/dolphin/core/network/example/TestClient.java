@@ -1,4 +1,4 @@
-package com.sabsari.dolphin.core.example;
+package com.sabsari.dolphin.core.network.example;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,46 +7,48 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import org.junit.Test;
-
 import com.sabsari.dolphin.core.value.ValueGenerator;
 import com.sabsari.dolphin.core.value.ValueGeneratorImpl;
 
-public class MultiThreadedTest {
-    
-    ValueGenerator msgGen = new ValueGeneratorImpl();
+public class TestClient {
 
-    @Test
-    public void _멀티쓰레드서버테스트() throws InterruptedException {
-        // 서버
-        int port = 13;
-        int sizeOfPool = 10;
-        MultiThreaded server = new MultiThreaded(port, sizeOfPool);
-        server.start();
-        System.out.println("서버생성 port:" + server.getPort());
-        
-        // 클라이언트
-        String host = "localhost";
+    public static final String END = "\r\n";
+
+    private ValueGenerator msgGen;
+    private String host;
+    private int port;
+    
+    public TestClient(String host, int port) {
+        this.host = host;
+        this.port = port;
+        msgGen = new ValueGeneratorImpl();
+    }
+    
+    public int getPort() {
+        return port;
+    }
+    
+    public void doTest() throws InterruptedException {        
         try (Socket client = new Socket(host, port)) {
-            System.out.println("서버와 접속 완료 port:" + port);
-            
+            System.out.println("접속 완료 서버 port:" + port + ", 클라이언트 port:" + client.getLocalPort());            
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             
             String message;
             String recvMsg;
+            int count = 0;
             
             while (true) {
                 message = msgGen.generateRefreshToken();               
-                out.write(message + MultiThreaded.END);
-                out.flush();            
+                out.write(message + END);
+                out.flush();
+                System.out.println("phase " + ++count);
                 System.out.println("보낸 메시지: " + message);                
                 recvMsg = in.readLine();
-                System.out.println("전송받은 메시지: " + recvMsg);
+                System.out.println("받은 메시지: " + recvMsg);
                 System.out.println();
                 Thread.sleep(1000);
-            }
-            
+            }            
         }
         catch (IOException ex) {
             ex.printStackTrace();
