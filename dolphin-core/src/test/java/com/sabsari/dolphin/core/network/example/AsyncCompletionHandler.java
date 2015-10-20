@@ -40,7 +40,32 @@ public class AsyncCompletionHandler extends Thread {
                     if (server.isOpen()) {
                         server.accept(null, this);
                     }
-                    echo2(connection);
+                    
+//                    echo(connection);
+//                    echo2(connection);
+                    
+                    ByteBuffer buffer = ByteBuffer.allocate(1024);
+                    connection.read(buffer, buffer, new CompletionHandler<Integer, ByteBuffer>() {                
+                        @Override
+                        public void completed(Integer result, ByteBuffer attachment) {
+                            attachment.flip();
+                            Future<Integer> writeResult = connection.write(attachment);
+                            
+                            try {
+                                writeResult.get(10, TimeUnit.SECONDS);
+                            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                                System.out.println("write failed! " + e.getMessage());
+                            }
+                            
+                            attachment.clear();
+                            connection.read(attachment, attachment, this);
+                        }
+
+                        @Override
+                        public void failed(Throwable exc, ByteBuffer attachment) {
+                            System.out.println("read failed! " + exc.getMessage());
+                        }
+                    });                    
                 }
                 
                 @Override
@@ -49,7 +74,6 @@ public class AsyncCompletionHandler extends Thread {
                 }
             });
             
-            System.in.read();
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -114,6 +138,8 @@ public class AsyncCompletionHandler extends Thread {
                     System.out.println("read failed! " + exc.getMessage());
                 }
             });
+            
+            System.in.read();
         }
         catch (Exception ex) {
             System.out.println("echo failed! " + ex);
