@@ -9,19 +9,23 @@ public class StreamTest {
     
     @Test
     public void _test() throws IOException {
-        generateCharacters2(System.out);
+        long start = System.currentTimeMillis();
         
-        Thread t = new Thread();
-        t.interrupt();
+        generateCharacters(System.out, 10000); 
+        
+        long end = System.currentTimeMillis();
+        long elapsed = end - start;
+        System.out.println("걸린시간: " + elapsed + "ms");
     }
 
-    public static void generateCharacters(OutputStream out) throws IOException {
+    public static void generateCharacters(OutputStream out, int count) throws IOException {
         int firstPrintableCharacter     = 33;
         int numberOfPrintableCharacters = 94;
         int numberOfCharactersPerLine   = 72;
         
         int start   = firstPrintableCharacter;
-        while (true) {
+        int t = 0;
+        while (t++ < count) {
             for (int i = start; i < start + numberOfCharactersPerLine; i++) {
                 out.write(
                         ((i - firstPrintableCharacter) % numberOfPrintableCharacters)
@@ -35,14 +39,15 @@ public class StreamTest {
         }
     }
     
-    public static void generateCharacters2(OutputStream out) throws IOException {
+    public static void generateCharactersBuf(OutputStream out, int count) throws IOException {
         int firstPrintableCharacter     = 33;
         int numberOfPrintableCharacters = 94;
         int numberOfCharactersPerLine   = 72;               
         int start   = firstPrintableCharacter;
         byte[] line = new byte[numberOfCharactersPerLine + 2];
         
-        while (true) {
+        int t = 0;
+        while (t++ < count) {
             for (int i = start; i < start + numberOfCharactersPerLine; i++) {
                 line[i - start] = (byte)((i - firstPrintableCharacter) % numberOfPrintableCharacters + firstPrintableCharacter);                
             }

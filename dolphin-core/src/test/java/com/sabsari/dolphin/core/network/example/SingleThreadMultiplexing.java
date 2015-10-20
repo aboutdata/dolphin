@@ -14,7 +14,7 @@ public class SingleThreadMultiplexing extends Thread {
 
     public static final String END = "\r\n";
     
-    private int port = 18;
+    private int port;
     
     private ServerSocketChannel serverChannel;
     private Selector selector;
@@ -25,6 +25,10 @@ public class SingleThreadMultiplexing extends Thread {
     
     public int getPort() {
         return port;
+    }
+    
+    public void init() {
+        
     }
     
     @Override
