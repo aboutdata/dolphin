@@ -13,6 +13,21 @@
 	<packaging>jar</packaging>
 	
 	<dependencies>
+		<dependency>
+      		<groupId>commons-lang</groupId>
+      		<artifactId>commons-lang</artifactId>
+      		<version>2.6</version>
+   		</dependency>
+    	<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+	
 		<!-- Test Artifacts -->
 		<dependency>
 			<groupId>junit</groupId>

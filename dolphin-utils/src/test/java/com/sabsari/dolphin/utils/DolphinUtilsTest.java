@@ -1,12 +1,10 @@
-package com.sabsari.dolphin.core.common.utils;
+package com.sabsari.dolphin.utils;
 
 import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import com.sabsari.dolphin.core.common.util.CommonUtils;
-
-public class StringUtilTest {
+public class DolphinUtilsTest {
 
 	private static final String INDEX_REGEX = "^\\{(0|[1-9][0-9]*)(,[-+][1-9][0-9]*)?\\}$";
 	
@@ -24,7 +22,7 @@ public class StringUtilTest {
 		for (int i=0 ; i < counter ; i++) {
 //			System.out.println(String.format("asdf%s, 1234%d, ㄱㄴㄷㄹ%s", "asdf", 234, "asdfasdf"));
 			
-			System.out.println(CommonUtils.format("asdf{0,+10}, 1234{1,-10}, ㄱㄴㄷㄹ{2,+20}", "asdf", 234, "asdfasdf"));
+			System.out.println(DolphinUtils.format("asdf{0,+10}, 1234{1,-10}, ㄱㄴㄷㄹ{2,+20}", "asdf", 234, "asdfasdf"));
 		}
 		
 		long end = System.currentTimeMillis();
