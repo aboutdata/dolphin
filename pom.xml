@@ -12,6 +12,7 @@
 		<module>dolphin-core</module>
 		<module>dolphin-api</module>
 		<module>dolphin-scheduler</module>
+		<module>dolphin-utils</module>
 	</modules>
 	
 	<!-- 
